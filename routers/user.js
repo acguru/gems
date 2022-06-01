@@ -38,7 +38,7 @@ router.post("/createuser", async (req, res) => {
   if (!req.body.SECRET_KEY || req.body.SECRET_KEY !== process.env.SECRET_KEY) {
     return res.status(200).send({ isOk: false, message: "Unauthorized - Wrong Secret Key" });
   }
-  let user = new User({
+  const user = new User({
     username: req.body.username,
     password: req.body.password,
   });

@@ -11,7 +11,7 @@ const auth = require("../middleware/auth");
  * @returns {Gem} Newly created or updated Gem
  */
 router.post("/data", auth, async (req, res) => {
-  let params = req.body;
+  const params = req.body;
   let newdata = new Gem();
 
   if (params._id && params._id.length > 1) {
@@ -222,7 +222,7 @@ router.post("/data", auth, async (req, res) => {
   // if created inside a file, add gem to file
   if (params.folderID && params.globe) {
     newdata.folder.push(params.folderID);
-    let obj = {
+    const obj = {
       path: params.globe,
     };
     newdata.globe.push(obj);

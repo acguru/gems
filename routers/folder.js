@@ -12,7 +12,7 @@ const Gem = require("../models/gems");
  * @returns {Folder} Newly created folder
  */
 router.post("/folder/createupdate", auth, async (req, res) => {
-  let params = req.body;
+  const params = req.body;
   let newdata = new Folder();
   if (params.status) {
     newdata.status = params.status;
@@ -37,7 +37,7 @@ router.post("/folder/createupdate", auth, async (req, res) => {
  * @returns {Folder} Updated folder
  */
 router.post("/folder/rename", async (req, res) => {
-  let params = req.body;
+  const params = req.body;
   let newdata = await Folder.findById(params.id).exec();
   newdata.text = params.text;
   await newdata.save();
@@ -54,10 +54,10 @@ router.post("/folder/rename", async (req, res) => {
  * @returns {String} message - error message if file name already exists
  */
 router.post("/file/rename", async (req, res) => {
-  let params = req.body;
+  const params = req.body;
 
   // if file name is already in use, return error message
-  let count = await Folder.countDocuments({
+  const count = await Folder.countDocuments({
     "items.path": `/${params.newname.split(" ").join("").toLowerCase()}`,
   }).exec();
   if (count > 0) {
@@ -104,12 +104,13 @@ router.post("/file/rename", async (req, res) => {
  * @returns {String} message - error message if file name is already in use
  */
 router.post("/file/createupdate", auth, async (req, res) => {
-  let params = req.body;
+  const params = req.body;
 
   // if file name is already in use, return error message
-  let count = await Folder.countDocuments({
+  const count = await Folder.countDocuments({
     "items.path": `/${params.filename.split(" ").join("").toLowerCase()}`,
   }).exec();
+
   if (count > 0) {
     return res.json({ message: "This file name already exists." });
   }
@@ -153,7 +154,7 @@ router.get("/folder/list", auth, async (req, res) => {
  * @returns {String} message - error message if folder with id doesn't exist
  */
 router.post("/folder/delete", auth, async (req, res) => {
-  let folder = await Folder.findById(req.body.id);
+  const folder = await Folder.findById(req.body.id);
   if (!folder)
     return res.json({ message: "Folder not found." });
   await folder.remove();
@@ -208,11 +209,11 @@ router.post("/file/delete", auth, async (req, res) => {
  * @returns {Gem[]} All gems in the file
  */
 router.get("/folder/listgems/:path", auth, async (req, res) => {
-  let folder = await Folder.findOne({
+  const folder = await Folder.findOne({
     "items.path": `/${req.params.path}`,
   }).exec();
-  let folderid = folder.id;
-  let gems = await Gem.find({
+  const folderid = folder.id;
+  const gems = await Gem.find({
     folder: folderid,
     "globe.path": `/${req.params.path}`,
     isSold: false,
@@ -240,7 +241,7 @@ router.post("/file/move", auth, async (req, res) => {
     return res.json({ message: "Please enter a valid folder name." });
 
   // create new file object
-  let obj = {
+  const obj = {
     text: req.body.file.text,
     path: req.body.file.path,
   };
